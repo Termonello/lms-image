@@ -29,4 +29,11 @@ $CFG->adminuser = getenv('MOODLE_ADMIN_USER') ?: '';
 $CFG->adminpass = getenv('MOODLE_ADMIN_PASS') ?: '';
 $CFG->adminemail = getenv('MOODLE_ADMIN_EMAIL') ?: '';
 
+/**
+ * Includes the Moodle setup library file.
+ * 
+ * This file contains core initialization and configuration setup required
+ * for Moodle to function properly. It must be included after all other
+ * configuration settings have been defined.
+ */
 require_once(__DIR__ . '/lib/setup.php');
