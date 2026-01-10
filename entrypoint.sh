@@ -1,6 +1,48 @@
 #!/bin/bash
 set -euo pipefail
 
+CONFIG_TEMPLATE="/usr/local/etc/moodle-config.php.tpl"
+CONFIG_FILE="/var/www/html/config.php"
+DATAROOT="${MOODLE_DATAROOT:-/var/www/moodledata}"
+
+if [ ! -f "$CONFIG_FILE" ] && [ -f "$CONFIG_TEMPLATE" ]; then
+  cp "$CONFIG_TEMPLATE" "$CONFIG_FILE"
+  chown www-data:www-data "$CONFIG_FILE"
+fi
+
+mkdir -p "$DATAROOT"
+chown -R www-data:www-data "$DATAROOT"
+
+if ! php /var/www/html/admin/cli/isinstalled.php --quiet >/dev/null 2>&1; then
+  if [ -z "${MOODLE_ADMIN_USER:-}" ] || [ -z "${MOODLE_ADMIN_PASS:-}" ] || [ -z "${MOODLE_ADMIN_EMAIL:-}" ]; then
+    echo "Missing admin credentials; set MOODLE_ADMIN_USER/MOODLE_ADMIN_PASS/MOODLE_ADMIN_EMAIL." >&2
+    exit 1
+  fi
+
+  if [ -z "${MOODLE_DBHOST:-}" ] || [ -z "${MOODLE_DBNAME:-}" ] || [ -z "${MOODLE_DBUSER:-}" ]; then
+    echo "Missing database settings; set MOODLE_DBHOST/MOODLE_DBNAME/MOODLE_DBUSER." >&2
+    exit 1
+  fi
+
+  php /var/www/html/admin/cli/install.php \
+    --agree-license \
+    --lang=en \
+    --wwwroot="${MOODLE_WWWROOT:-http://localhost}" \
+    --dataroot="$DATAROOT" \
+    --dbtype="${MOODLE_DBTYPE:-pgsql}" \
+    --dbhost="${MOODLE_DBHOST:-localhost}" \
+    --dbport="${MOODLE_DBPORT:-5432}" \
+    --dbname="${MOODLE_DBNAME:-moodle}" \
+    --dbuser="${MOODLE_DBUSER:-moodle}" \
+    --dbpass="${MOODLE_DBPASS:-}" \
+    --fullname="${MOODLE_SITE_FULLNAME:-Moodle Site}" \
+    --shortname="${MOODLE_SITE_SHORTNAME:-Moodle}" \
+    --adminuser="${MOODLE_ADMIN_USER}" \
+    --adminpass="${MOODLE_ADMIN_PASS}" \
+    --adminemail="${MOODLE_ADMIN_EMAIL}" \
+    --non-interactive
+fi
+
 # Start cron (best effort)
 if command -v service >/dev/null 2>&1; then
   service cron start

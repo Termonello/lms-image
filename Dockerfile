@@ -59,6 +59,9 @@ COPY entrypoint.sh /entrypoint.sh
 RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
 RUN head -n 1 /entrypoint.sh | cat -A
 
+# Copy Moodle config template (env-driven)
+COPY moodle/config/moodle-config.php.tpl /usr/local/etc/moodle-config.php.tpl
+
 # Expose port 80
 EXPOSE 80
 
