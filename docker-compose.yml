@@ -11,10 +11,10 @@ services:
     environment:
       # Moodle DB settings (PostgreSQL)
       MOODLE_DBTYPE: pgsql
-      MOODLE_DBHOST: ${PGHOST}        # z.B. mypg.postgres.database.azure.com
+      MOODLE_DBHOST: ${PGHOST}        
       MOODLE_DBPORT: 5432
       MOODLE_DBNAME: ${PGDATABASE}
-      MOODLE_DBUSER: ${PGUSER}        # meist user@servername
+      MOODLE_DBUSER: ${PGUSER}        
       MOODLE_DBPASS: ${PGPASSWORD}
       MOODLE_WWWROOT: ${MOODLE_WWWROOT}
       MOODLE_DATAROOT: /var/www/moodledata

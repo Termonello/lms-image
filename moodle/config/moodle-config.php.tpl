@@ -19,7 +19,14 @@ $CFG->dboptions = array(
     'sslmode' => 'require',
 );
 
-$CFG->wwwroot = getenv('MOODLE_WWWROOT') ?: 'http://localhost';
+if (getenv('MOODLE_WWWROOT')) {
+    $CFG->wwwroot = getenv('MOODLE_WWWROOT');
+} elseif (!empty($_SERVER['HTTP_HOST'])) {
+    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $CFG->wwwroot = $scheme . '://' . $_SERVER['HTTP_HOST'];
+} else {
+    $CFG->wwwroot = '';
+}
 $CFG->dataroot = getenv('MOODLE_DATAROOT') ?: '/var/www/moodledata';
 $CFG->admin = 'admin';
 $CFG->directorypermissions = 02777;
