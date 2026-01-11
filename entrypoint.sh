@@ -31,14 +31,17 @@ if ! php /var/www/html/admin/cli/isinstalled.php --quiet >/dev/null 2>&1; then
   fi
 
   if [ -f "$CONFIG_FILE" ]; then
-    php /var/www/html/admin/cli/install_database.php \
+    if ! php /var/www/html/admin/cli/install_database.php \
       --agree-license \
       --lang=en \
       --fullname="${MOODLE_SITE_FULLNAME:-Moodle Site}" \
       --shortname="${MOODLE_SITE_SHORTNAME:-Moodle}" \
       --adminuser="$MOODLE_ADMIN_USER" \
       --adminpass="$MOODLE_ADMIN_PASS" \
-      --adminemail="$MOODLE_ADMIN_EMAIL"
+      --adminemail="$MOODLE_ADMIN_EMAIL"; then
+      echo "install_database.php failed; attempting upgrade.php instead." >&2
+      php /var/www/html/admin/cli/upgrade.php --non-interactive || true
+    fi
   else
     php /var/www/html/admin/cli/install.php \
       --agree-license \
