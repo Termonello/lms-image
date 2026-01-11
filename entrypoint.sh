@@ -30,29 +30,35 @@ if ! php /var/www/html/admin/cli/isinstalled.php --quiet >/dev/null 2>&1; then
     exit 1
   fi
 
-if [ ! -f "$DATAROOT/.installed" ]; then
-  # install.php ausführen
-  touch "$DATAROOT/.installed"
+  if [ -f "$CONFIG_FILE" ]; then
+    php /var/www/html/admin/cli/install_database.php \
+      --agree-license \
+      --non-interactive \
+      --lang=en \
+      --fullname="${MOODLE_SITE_FULLNAME:-Moodle Site}" \
+      --shortname="${MOODLE_SITE_SHORTNAME:-Moodle}" \
+      --adminuser="$MOODLE_ADMIN_USER" \
+      --adminpass="$MOODLE_ADMIN_PASS" \
+      --adminemail="$MOODLE_ADMIN_EMAIL"
+  else
+    php /var/www/html/admin/cli/install.php \
+      --agree-license \
+      --non-interactive \
+      --lang=en \
+      --wwwroot="$WWWROOT" \
+      --dataroot="$DATAROOT" \
+      --dbtype="${MOODLE_DBTYPE:-pgsql}" \
+      --dbhost="$MOODLE_DBHOST" \
+      --dbport="${MOODLE_DBPORT:-5432}" \
+      --dbname="$MOODLE_DBNAME" \
+      --dbuser="$MOODLE_DBUSER" \
+      --dbpass="$MOODLE_DBPASS" \
+      --fullname="${MOODLE_SITE_FULLNAME:-Moodle Site}" \
+      --shortname="${MOODLE_SITE_SHORTNAME:-Moodle}" \
+      --adminuser="$MOODLE_ADMIN_USER" \
+      --adminpass="$MOODLE_ADMIN_PASS" \
+      --adminemail="$MOODLE_ADMIN_EMAIL"
   fi
-
-# Run Moodle installation script
-  php /var/www/html/admin/cli/install.php \
-    --agree-license \
-    --non-interactive \
-    --lang=en \
-    --wwwroot="$WWWROOT" \
-    --dataroot="$DATAROOT" \
-    --dbtype="${MOODLE_DBTYPE:-pgsql}" \
-    --dbhost="$MOODLE_DBHOST" \
-    --dbport="${MOODLE_DBPORT:-5432}" \
-    --dbname="$MOODLE_DBNAME" \
-    --dbuser="$MOODLE_DBUSER" \
-    --dbpass="$MOODLE_DBPASS" \
-    --fullname="${MOODLE_SITE_FULLNAME:-Moodle Site}" \
-    --shortname="${MOODLE_SITE_SHORTNAME:-Moodle}" \
-    --adminuser="$MOODLE_ADMIN_USER" \
-    --adminpass="$MOODLE_ADMIN_PASS" \
-    --adminemail="$MOODLE_ADMIN_EMAIL"
 fi
 
 # Start cron (best effort)
