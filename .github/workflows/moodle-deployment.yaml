@@ -11,8 +11,8 @@ env:
   VERSION: 0.0.1
   MO_DOCKERFILE: Dockerfile
   MO_DOCKERCONTEXT: .
-  MO_REGISTRY_AUTH_URL: https://lmsdevcr.azurecr.io
-  MO_REGISTRY_URL: lmsdevcr.azurecr.io/customlms/moodle
+  MO_REGISTRY_AUTH_URL: lmsdevcr.azurecr.io
+  MO_REGISTRY_URL: lmsdevcr.azurecr.io/customlms/
   MO_IMAGE_NAME: moodle
   MO_API_KIND: workspace
   MO_API_TOKEN_EXPIRES_AT__309A084A1207AB26556C: '2026-01-15T08:52:37.000Z'
