@@ -31,10 +31,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: get semversion
-        run: |
-          VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
       - name: Get last commit hash
         id: lastHash
         run: |
@@ -60,16 +56,15 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ${{ env.MO_REGISTRY_URL }}/${{ env.MO_IMAGE_NAME }}:${{ env.VERSION }}
             ${{ env.MO_REGISTRY_URL }}/${{ env.MO_IMAGE_NAME }}:latest
             ${{ env.MO_REGISTRY_URL }}/${{ env.MO_IMAGE_NAME }}:${{ env.LAST_HASH }}
-          build-args: VERSION=${{ env.VERSION }}
+#          build-args: VERSION=${{ env.VERSION }}
       - id: releaseWithMogenius-309A084A1207AB26556C
         name: Release with mogenius
         uses: mogenius/mogenius-release-action@v1
         with:
           dev: false
-          image: ${{ env.MO_REGISTRY_URL }}/${{ env.MO_IMAGE_NAME }}:${{ env.VERSION }}
+          image: ${{ env.MO_REGISTRY_URL }}/${{ env.MO_IMAGE_NAME }}:${{ env.LAST_HASH }}
           kind: Deployment
           namespace: poki-dev
           resourceName: deploy-lms-to-mogenius
