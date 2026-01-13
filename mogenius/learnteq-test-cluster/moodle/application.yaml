@@ -75,32 +75,6 @@ spec:
                 pv.kubernetes.io/bind-completed: 'yes'
                 pv.kubernetes.io/bound-by-controller: 'yes'
                 volume.beta.kubernetes.io/storage-provisioner: cinder.csi.openstack.org
-                volume.kubernetes.io/selected-node: shoot--431053--learnteq-test-worker-l926i-z1-7bdb4-bw5lb
-                volume.kubernetes.io/storage-provisioner: cinder.csi.openstack.org
-              finalizers:
-                - kubernetes.io/pvc-protection
-              labels:
-                app.kubernetes.io/component: primary
-                app.kubernetes.io/name: mariadb
-                app.kubernetes.io/part-of: mariadb
-              name: data-mariadb-0
-              namespace: poki-dev
-            spec:
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 8Gi
-              storageClassName: default
-              volumeMode: Filesystem
-              volumeName: pv-shoot--431053--learnteq-test-a5774a81-8a52-4bd7-b7d0-fcef73cf0ae5
-          - apiVersion: v1
-            kind: PersistentVolumeClaim
-            metadata:
-              annotations:
-                pv.kubernetes.io/bind-completed: 'yes'
-                pv.kubernetes.io/bound-by-controller: 'yes'
-                volume.beta.kubernetes.io/storage-provisioner: cinder.csi.openstack.org
                 volume.kubernetes.io/selected-node: shoot--431053--learnteq-test-worker-l926i-z1-7bdb4-5sl5l
                 volume.kubernetes.io/storage-provisioner: cinder.csi.openstack.org
               finalizers:
