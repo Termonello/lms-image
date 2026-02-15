@@ -66,7 +66,7 @@ jobs:
           dev: false
           image: ${{ env.MO_REGISTRY_URL }}/${{ env.MO_IMAGE_NAME }}:${{ env.LAST_HASH }}
           kind: Deployment
-          namespace: pok-dev
+          namespace: poki-dev
           resourceName: deploy-lms-to-mogenius
           containerName: deploy-lms-to-mogenius
           keyKind: ${{ env.MO_API_KIND }}
